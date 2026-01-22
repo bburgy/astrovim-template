@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
@@ -45,6 +45,41 @@ return {
     ---@diagnostic disable: missing-fields
     config = {
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      elixirls = {
+        -- Didn't find a better solution but the AstroVim should automatically find the binaries.
+        cmd = { "/Users/benjamin/.local/share/nvim/mason/bin/elixir-ls" },
+        filetypes = { "elixir", "eelixir", "heex" },
+        root_dir = function(fname) return require("lspconfig.util").root_pattern("mix.exs", ".git")(fname) end,
+        init_options = {
+          mixEnv = "dev"
+        }
+      },
+      nextls = {
+        -- Didn't find a better solution but the AstroVim should automatically find the binaries.
+        cmd = { "/Users/benjamin/.local/share/nvim/mason/bin/nextls", "--stdio" },
+      },
+      ltex = {
+        filetypes = { "tex" },
+        enabled = true,
+        init_options = {
+          additionalRules = {
+            motherTongue = "fr",
+          },
+        },
+      },
+      omnisharp = {
+        enabled = true,
+        autostart = true,
+        -- Didn't find a better solution but the AstroVim should automatically find the binaries.
+        cmd = { "/Users/benjamin/.local/share/nvim/mason/bin/OmniSharp" },
+        init_options = {
+          RenameOptions = {
+            RenameInComments = false,
+            RenameOverloads = true,
+            RenameInStrings = true,
+          },
+        }
+      },
     },
     -- customize how language servers are attached
     handlers = {
@@ -79,21 +114,21 @@ return {
     },
     -- mappings to be set up on attaching of a language server
     mappings = {
-      n = {
-        -- a `cond` key can provided as the string of a server capability to be required to attach, or a function with `client` and `bufnr` parameters from the `on_attach` that returns a boolean
-        gD = {
-          function() vim.lsp.buf.declaration() end,
-          desc = "Declaration of current symbol",
-          cond = "textDocument/declaration",
-        },
-        ["<Leader>uY"] = {
-          function() require("astrolsp.toggles").buffer_semantic_tokens() end,
-          desc = "Toggle LSP semantic highlight (buffer)",
-          cond = function(client)
-            return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
-          end,
-        },
-      },
+      -- n = {
+      -- a `cond` key can provided as the string of a server capability to be required to attach, or a function with `client` and `bufnr` parameters from the `on_attach` that returns a boolean
+      -- gD = {
+      --   function() vim.lsp.buf.declaration() end,
+      --   desc = "Declaration of current symbol",
+      --   cond = "textDocument/declaration",
+      -- },
+      -- ["<Leader>uY"] = {
+      --   function() require("astrolsp.toggles").buffer_semantic_tokens() end,
+      --   desc = "Toggle LSP semantic highlight (buffer)",
+      --   cond = function(client)
+      --     return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
+      --   end,
+      -- },
+      -- },
     },
     -- A custom `on_attach` function to be run after the default `on_attach` function
     -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
